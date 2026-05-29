@@ -38,95 +38,96 @@ html { scroll-behavior: smooth; }
 body { font-family: 'Inter', sans-serif; color: var(--text); line-height: 1.7; background: var(--cream); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 body.loading { overflow: hidden; height: 100vh; }
 
-/* ============ PRELOADER ============ */
-.preloader { position: fixed; inset: 0; background: linear-gradient(180deg, #0a1628 0%, #15243f 50%, #0a1628 100%); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.7s var(--easing), visibility 0.7s var(--easing); overflow: hidden; }
-.preloader::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(ellipse at 50% 30%, rgba(201, 169, 97, 0.12), transparent 60%); pointer-events: none; }
+/* ============ PRELOADER — PREMIUM EDITORIAL ============ */
+.preloader { position: fixed; inset: 0; background: #0a1628; z-index: 99999; display: flex; flex-direction: column; justify-content: space-between; transition: opacity 0.8s var(--easing), visibility 0.8s var(--easing); overflow: hidden; padding: 0; }
+.preloader::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(ellipse at 50% 50%, rgba(201, 169, 97, 0.08), transparent 70%); pointer-events: none; }
+.preloader::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(201, 169, 97, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(201, 169, 97, 0.02) 1px, transparent 1px); background-size: 80px 80px; pointer-events: none; }
 .preloader.hidden { opacity: 0; visibility: hidden; }
-.preloader.hidden .pre-houses { transform: translateY(60px); opacity: 0; }
-.preloader.hidden .pre-stage { transform: scale(0.92); }
 
-/* Skyline of houses at bottom */
-.pre-houses { position: absolute; bottom: 0; left: 0; right: 0; display: flex; align-items: flex-end; justify-content: center; gap: 0; pointer-events: none; opacity: 0.5; transition: all 0.7s var(--easing); }
-.pre-houses svg { width: 100%; max-width: 1200px; height: auto; }
+/* Top + Bottom horizontal lines that draw across */
+.pre-line-top, .pre-line-bottom { position: absolute; left: 0; right: 0; height: 1px; background: var(--gold); transform-origin: center; transform: scaleX(0); animation: drawLine 1s var(--easing) 0.2s forwards; z-index: 3; }
+.pre-line-top { top: 60px; }
+.pre-line-bottom { bottom: 60px; }
+@keyframes drawLine { to { transform: scaleX(1); } }
 
-.pre-stage { position: relative; width: 240px; height: 240px; display: flex; align-items: center; justify-content: center; transition: transform 0.7s var(--easing); }
-.pre-ring { position: absolute; border-radius: 50%; }
-.pre-ring-1 { inset: -10px; border: 1px solid rgba(201, 169, 97, 0.18); }
-.pre-ring-2 { inset: -34px; border: 1px dashed rgba(201, 169, 97, 0.3); animation: spinReverse 28s linear infinite; }
-.pre-ring-3 { inset: -56px; border: 1px solid rgba(201, 169, 97, 0.12); }
+/* Top bar with brand label */
+.pre-top { position: absolute; top: 0; left: 0; right: 0; padding: 26px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 4; opacity: 0; animation: fadeIn 0.6s ease 0.4s forwards; }
+.pre-top-label { font-family: 'Inter', sans-serif; font-size: 0.68rem; letter-spacing: 5px; text-transform: uppercase; color: rgba(255,255,255,0.55); font-weight: 500; }
+.pre-top-est { font-family: 'Cormorant Garamond', serif; font-size: 0.78rem; letter-spacing: 4px; color: var(--gold-light); font-style: italic; }
+@keyframes fadeIn { to { opacity: 1; } }
 
-/* Compass markers (N/S/E/W) - subtle nod to land/lots */
-.pre-compass { position: absolute; inset: -56px; pointer-events: none; }
-.pre-compass span { position: absolute; font-family: 'Cormorant Garamond', serif; font-size: 0.7rem; letter-spacing: 2px; color: rgba(201, 169, 97, 0.5); top: 50%; left: 50%; }
-.pre-compass span:nth-child(1) { transform: translate(-50%, -50%) translateY(-130px); }
-.pre-compass span:nth-child(2) { transform: translate(-50%, -50%) translateX(130px); }
-.pre-compass span:nth-child(3) { transform: translate(-50%, -50%) translateY(130px); }
-.pre-compass span:nth-child(4) { transform: translate(-50%, -50%) translateX(-130px); }
+/* Vertical line dropping from top */
+.pre-drop-line { position: absolute; top: 60px; left: 50%; width: 1px; height: 0; background: linear-gradient(180deg, transparent, var(--gold) 30%, var(--gold)); transform: translateX(-50%); animation: dropLine 1.2s var(--easing) 0.8s forwards; z-index: 2; }
+@keyframes dropLine { to { height: calc(50vh - 220px); } }
 
-.pre-arc { position: absolute; inset: -34px; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--gold); border-right-color: var(--gold); animation: spinArc 2s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
-.pre-arc-2 { position: absolute; inset: -56px; border-radius: 50%; border: 1.5px solid transparent; border-bottom-color: var(--gold-light); border-left-color: var(--gold-light); animation: spinArc 3s cubic-bezier(0.65, 0, 0.35, 1) infinite reverse; opacity: 0.55; }
-@keyframes spinArc { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes spinReverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+/* Center stage — rectangular */
+.pre-stage { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 50px; z-index: 5; padding: 100px 24px; }
 
-/* Orbiting dots - now warmer/softer */
-.pre-dots { position: absolute; inset: -56px; animation: orbitDots 12s linear infinite; }
-.pre-dots span { position: absolute; width: 5px; height: 5px; background: var(--gold); border-radius: 50%; top: 50%; left: 50%; box-shadow: 0 0 10px rgba(201, 169, 97, 0.7); }
-.pre-dots span:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateY(-176px); }
-.pre-dots span:nth-child(2) { transform: translate(-50%, -50%) rotate(90deg) translateY(-176px); }
-.pre-dots span:nth-child(3) { transform: translate(-50%, -50%) rotate(180deg) translateY(-176px); }
-.pre-dots span:nth-child(4) { transform: translate(-50%, -50%) rotate(270deg) translateY(-176px); }
-@keyframes orbitDots { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+/* Rectangular frame with corner brackets */
+.pre-frame { position: relative; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; opacity: 0; animation: fadeIn 0.8s ease 1.4s forwards; }
+.pre-frame-bg { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); backdrop-filter: blur(10px); border: 1px solid rgba(201, 169, 97, 0.2); }
+.pre-frame-corner { position: absolute; width: 24px; height: 24px; border: 1.5px solid var(--gold); }
+.pre-frame-corner.tl { top: -12px; left: -12px; border-right: 0; border-bottom: 0; }
+.pre-frame-corner.tr { top: -12px; right: -12px; border-left: 0; border-bottom: 0; }
+.pre-frame-corner.bl { bottom: -12px; left: -12px; border-right: 0; border-top: 0; }
+.pre-frame-corner.br { bottom: -12px; right: -12px; border-left: 0; border-top: 0; }
+.pre-frame img { position: relative; width: 140px; height: 140px; object-fit: contain; filter: drop-shadow(0 0 30px rgba(201, 169, 97, 0.4)); animation: logoFloat 4s ease-in-out infinite; }
+@keyframes logoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
-.pre-logo-wrap { position: relative; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #ffffff 0%, #faf6ef 70%, #f5efe4 100%); border-radius: 50%; box-shadow: 0 0 70px rgba(201, 169, 97, 0.35), 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(201, 169, 97, 0.3); animation: logoBreathe 3s ease-in-out infinite; }
-@keyframes logoBreathe {
-  0%, 100% { box-shadow: 0 0 70px rgba(201, 169, 97, 0.3), 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(201, 169, 97, 0.3); transform: scale(1); }
-  50% { box-shadow: 0 0 100px rgba(201, 169, 97, 0.55), 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(201, 169, 97, 0.5); transform: scale(1.02); }
-}
-.pre-logo-wrap img { width: 148px; height: 148px; object-fit: contain; animation: logoSpin 8s ease-in-out infinite; }
-@keyframes logoSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.pre-brand { margin-top: 80px; text-align: center; position: relative; z-index: 2; }
-.pre-tag { display: inline-flex; align-items: center; gap: 12px; font-size: 0.62rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-light); opacity: 0; animation: fadeUp 0.7s ease 0.3s forwards; margin-bottom: 14px; }
-.pre-tag::before, .pre-tag::after { content: ''; width: 24px; height: 1px; background: var(--gold); }
-.pre-brand-name { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: white; letter-spacing: 4px; line-height: 1.1; opacity: 0; animation: fadeUp 0.7s ease 0.5s forwards; font-weight: 500; }
+/* Brand title block */
+.pre-brand { text-align: center; opacity: 0; animation: fadeUp 0.8s ease 1.8s forwards; }
+.pre-brand-label { display: inline-flex; align-items: center; gap: 14px; font-family: 'Inter', sans-serif; font-size: 0.66rem; letter-spacing: 5px; text-transform: uppercase; color: var(--gold-light); margin-bottom: 22px; font-weight: 500; }
+.pre-brand-label::before, .pre-brand-label::after { content: ''; width: 28px; height: 1px; background: var(--gold); }
+.pre-brand-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 5vw, 3.6rem); color: white; line-height: 1; font-weight: 500; letter-spacing: -0.5px; margin-bottom: 16px; }
 .pre-brand-name em { font-style: italic; color: var(--gold-light); font-weight: 400; }
-.pre-brand-sub { font-family: 'Inter', sans-serif; font-size: 0.72rem; color: rgba(255,255,255,0.5); letter-spacing: 3px; text-transform: uppercase; margin-top: 12px; opacity: 0; animation: fadeUp 0.7s ease 0.8s forwards; font-weight: 500; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-.pre-divider { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 20px; opacity: 0; animation: fadeUp 0.7s ease 1s forwards; }
-.pre-divider::before, .pre-divider::after { content: ''; width: 36px; height: 1px; background: rgba(201, 169, 97, 0.5); }
-.pre-divider i { color: var(--gold); font-size: 0.8rem; }
-.pre-progress { margin-top: 32px; width: 220px; opacity: 0; animation: fadeUp 0.7s ease 1.2s forwards; }
-.pre-progress-bar { height: 1px; background: rgba(255,255,255,0.08); position: relative; overflow: hidden; }
-.pre-progress-bar::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, var(--gold), transparent); animation: progressSlide 2s ease-in-out infinite; }
-@keyframes progressSlide { 0% { left: -60%; } 100% { left: 100%; } }
-.pre-progress-txt { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 14px; text-align: center; font-weight: 500; }
+.pre-brand-tag { font-family: 'Inter', sans-serif; font-size: 0.72rem; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.45); font-weight: 500; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
-.pre-corners { position: absolute; inset: 32px; pointer-events: none; }
-.pre-corners span { position: absolute; width: 24px; height: 24px; border: 1px solid var(--gold); opacity: 0.3; }
-.pre-corners span:nth-child(1) { top: 0; left: 0; border-right: 0; border-bottom: 0; }
-.pre-corners span:nth-child(2) { top: 0; right: 0; border-left: 0; border-bottom: 0; }
-.pre-corners span:nth-child(3) { bottom: 0; left: 0; border-right: 0; border-top: 0; }
-.pre-corners span:nth-child(4) { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+/* Bottom counter + progress */
+.pre-bottom { position: absolute; bottom: 0; left: 0; right: 0; padding: 26px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 4; opacity: 0; animation: fadeIn 0.6s ease 2.2s forwards; }
+.pre-counter { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; letter-spacing: 3px; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 8px; }
+.pre-counter-num { font-size: 2.2rem; color: var(--gold-light); font-weight: 500; line-height: 1; min-width: 56px; display: inline-block; }
+.pre-counter-sep { color: rgba(255,255,255,0.3); margin: 0 6px; }
+.pre-counter-total { font-size: 0.85rem; color: rgba(255,255,255,0.4); align-self: flex-end; padding-bottom: 4px; }
+.pre-status { font-family: 'Inter', sans-serif; font-size: 0.68rem; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.45); display: flex; align-items: center; gap: 14px; font-weight: 500; }
+.pre-status::before { content: ''; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: blink 1.4s ease-in-out infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-@media (max-width: 540px) {
-  .pre-stage { width: 190px; height: 190px; }
-  .pre-logo-wrap { width: 140px; height: 140px; }
-  .pre-logo-wrap img { width: 112px; height: 112px; }
-  .pre-dots span:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateY(-145px); }
-  .pre-dots span:nth-child(2) { transform: translate(-50%, -50%) rotate(90deg) translateY(-145px); }
-  .pre-dots span:nth-child(3) { transform: translate(-50%, -50%) rotate(180deg) translateY(-145px); }
-  .pre-dots span:nth-child(4) { transform: translate(-50%, -50%) rotate(270deg) translateY(-145px); }
-  .pre-compass span:nth-child(1) { transform: translate(-50%, -50%) translateY(-108px); }
-  .pre-compass span:nth-child(2) { transform: translate(-50%, -50%) translateX(108px); }
-  .pre-compass span:nth-child(3) { transform: translate(-50%, -50%) translateY(108px); }
-  .pre-compass span:nth-child(4) { transform: translate(-50%, -50%) translateX(-108px); }
-  .pre-brand { margin-top: 60px; }
-  .pre-brand-name { font-size: 1.6rem; letter-spacing: 3px; }
-  .pre-corners { inset: 18px; }
-  .pre-corners span { width: 18px; height: 18px; }
+/* Progress bar — horizontal line at bottom */
+.pre-progress-line { position: absolute; bottom: 60px; left: 50px; right: 50px; height: 1px; background: rgba(255,255,255,0.08); z-index: 3; opacity: 0; animation: fadeIn 0.6s ease 2s forwards; }
+.pre-progress-line-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold-light)); box-shadow: 0 0 12px rgba(201, 169, 97, 0.6); animation: fillProgress 2.4s var(--easing) 2.2s forwards; }
+@keyframes fillProgress { to { width: 100%; } }
+
+/* Frame side decorations - thin gold L-brackets at sides */
+.pre-side-deco { position: absolute; top: 50%; transform: translateY(-50%); width: 30px; height: 80px; z-index: 3; opacity: 0; animation: fadeIn 0.8s ease 1.6s forwards; }
+.pre-side-deco.left { left: 60px; border-left: 1px solid var(--gold); border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); }
+.pre-side-deco.right { right: 60px; border-right: 1px solid var(--gold); border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); }
+
+@media (max-width: 768px) {
+  .pre-top, .pre-bottom { padding: 22px 24px; }
+  .pre-line-top, .pre-progress-line { top: 50px; }
+  .pre-line-top { left: 0; right: 0; }
+  .pre-line-bottom { bottom: 50px; }
+  .pre-progress-line { bottom: 50px; left: 24px; right: 24px; }
+  .pre-side-deco { display: none; }
+  .pre-drop-line { top: 50px; }
+  @keyframes dropLine { to { height: calc(50vh - 200px); } }
+  .pre-top-est { display: none; }
+  .pre-top-label { font-size: 0.62rem; letter-spacing: 3px; }
+  .pre-counter { font-size: 0.9rem; }
+  .pre-counter-num { font-size: 1.7rem; min-width: 44px; }
+  .pre-status { font-size: 0.6rem; letter-spacing: 3px; }
+}
+@media (max-width: 480px) {
+  .pre-frame { width: 140px; height: 140px; }
+  .pre-frame img { width: 110px; height: 110px; }
+  .pre-brand-name { font-size: 2rem; }
+  .pre-brand-label { font-size: 0.6rem; letter-spacing: 4px; }
+  .pre-brand-label::before, .pre-brand-label::after { width: 20px; }
+  .pre-brand-tag { font-size: 0.62rem; letter-spacing: 3px; }
+  .pre-stage { gap: 36px; }
+  .pre-bottom { flex-direction: row; gap: 12px; padding: 18px 20px; }
+  .pre-counter-total { display: none; }
 }
 .container { max-width: 1320px; margin: 0 auto; padding: 0 32px; }
 .container-tight { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
@@ -682,87 +683,59 @@ h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 500; let
 
 <!-- PRELOADER -->
 <div class="preloader" id="preloader">
-  <div class="pre-corners"><span></span><span></span><span></span><span></span></div>
 
+  <!-- Top horizontal line -->
+  <div class="pre-line-top"></div>
+
+  <!-- Top bar -->
+  <div class="pre-top">
+    <div class="pre-top-label">Urbanización</div>
+    <div class="pre-top-est">— Est. La Victoria —</div>
+  </div>
+
+  <!-- Vertical drop line from top to logo -->
+  <div class="pre-drop-line"></div>
+
+  <!-- Side decorations -->
+  <div class="pre-side-deco left"></div>
+  <div class="pre-side-deco right"></div>
+
+  <!-- Center stage -->
   <div class="pre-stage">
-    <div class="pre-ring pre-ring-3"></div>
-    <div class="pre-ring pre-ring-2"></div>
-    <div class="pre-ring pre-ring-1"></div>
-    <div class="pre-compass"><span>N</span><span>E</span><span>S</span><span>O</span></div>
-    <div class="pre-arc"></div>
-    <div class="pre-arc-2"></div>
-    <div class="pre-dots"><span></span><span></span><span></span><span></span></div>
-    <div class="pre-logo-wrap">
+    <div class="pre-frame">
+      <div class="pre-frame-bg"></div>
+      <span class="pre-frame-corner tl"></span>
+      <span class="pre-frame-corner tr"></span>
+      <span class="pre-frame-corner bl"></span>
+      <span class="pre-frame-corner br"></span>
       <img src="logo.png" alt="Urbanización La Victoria">
+    </div>
+
+    <div class="pre-brand">
+      <div class="pre-brand-label">Bienvenido</div>
+      <div class="pre-brand-name">La <em>Victoria</em></div>
+      <div class="pre-brand-tag">Lotes Residenciales · 7 × 14 m</div>
     </div>
   </div>
 
-  <div class="pre-brand">
-    <div class="pre-tag">Bienvenido</div>
-    <div class="pre-brand-name">Tu hogar te <em>espera</em></div>
-    <div class="pre-brand-sub">Urbanización La Victoria</div>
-    <div class="pre-divider"><i class="fas fa-house-chimney"></i></div>
+  <!-- Progress line -->
+  <div class="pre-progress-line">
+    <div class="pre-progress-line-fill"></div>
   </div>
 
-  <div class="pre-progress">
-    <div class="pre-progress-bar"></div>
-    <div class="pre-progress-txt">Preparando tu visita</div>
+  <!-- Bottom counter + status -->
+  <div class="pre-bottom">
+    <div class="pre-counter">
+      <span class="pre-counter-num" id="preCounter">00</span>
+      <span class="pre-counter-sep">/</span>
+      <span class="pre-counter-total">100</span>
+    </div>
+    <div class="pre-status">Preparando tu visita</div>
   </div>
 
-  <!-- Subtle skyline of houses at bottom -->
-  <div class="pre-houses">
-    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <g fill="rgba(201, 169, 97, 0.18)" stroke="rgba(201, 169, 97, 0.35)" stroke-width="0.8">
-        <!-- House 1 -->
-        <path d="M 50 80 L 50 50 L 70 32 L 90 50 L 90 80 Z"/>
-        <rect x="64" y="56" width="12" height="24" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 2 (taller) -->
-        <path d="M 130 80 L 130 40 L 155 18 L 180 40 L 180 80 Z"/>
-        <rect x="148" y="48" width="14" height="32" fill="rgba(10,22,40,0.6)"/>
-        <rect x="160" y="46" width="10" height="10" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 3 -->
-        <path d="M 220 80 L 220 52 L 240 36 L 260 52 L 260 80 Z"/>
-        <rect x="232" y="58" width="10" height="22" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 4 (small) -->
-        <path d="M 300 80 L 300 58 L 318 42 L 336 58 L 336 80 Z"/>
-        <rect x="312" y="62" width="10" height="18" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 5 -->
-        <path d="M 380 80 L 380 44 L 405 22 L 430 44 L 430 80 Z"/>
-        <rect x="395" y="52" width="12" height="28" fill="rgba(10,22,40,0.6)"/>
-        <rect x="411" y="50" width="10" height="10" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 6 -->
-        <path d="M 480 80 L 480 50 L 502 32 L 524 50 L 524 80 Z"/>
-        <rect x="494" y="58" width="12" height="22" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 7 (tall center) -->
-        <path d="M 570 80 L 570 36 L 600 12 L 630 36 L 630 80 Z"/>
-        <rect x="588" y="44" width="14" height="36" fill="rgba(10,22,40,0.6)"/>
-        <rect x="606" y="42" width="12" height="14" fill="rgba(10,22,40,0.6)"/>
-        <rect x="606" y="60" width="12" height="12" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 8 -->
-        <path d="M 680 80 L 680 48 L 702 30 L 724 48 L 724 80 Z"/>
-        <rect x="694" y="56" width="12" height="24" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 9 -->
-        <path d="M 770 80 L 770 54 L 790 38 L 810 54 L 810 80 Z"/>
-        <rect x="782" y="60" width="10" height="20" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 10 -->
-        <path d="M 860 80 L 860 42 L 884 22 L 908 42 L 908 80 Z"/>
-        <rect x="874" y="50" width="12" height="30" fill="rgba(10,22,40,0.6)"/>
-        <rect x="890" y="48" width="10" height="12" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 11 -->
-        <path d="M 950 80 L 950 50 L 970 32 L 990 50 L 990 80 Z"/>
-        <rect x="964" y="58" width="12" height="22" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 12 -->
-        <path d="M 1030 80 L 1030 46 L 1053 26 L 1076 46 L 1076 80 Z"/>
-        <rect x="1044" y="54" width="12" height="26" fill="rgba(10,22,40,0.6)"/>
-        <rect x="1060" y="52" width="10" height="10" fill="rgba(10,22,40,0.6)"/>
-        <!-- House 13 -->
-        <path d="M 1110 80 L 1110 54 L 1130 38 L 1150 54 L 1150 80 Z"/>
-        <rect x="1122" y="60" width="10" height="20" fill="rgba(10,22,40,0.6)"/>
-        <!-- Ground line -->
-        <line x1="0" y1="80" x2="1200" y2="80" stroke="rgba(201, 169, 97, 0.4)" stroke-width="1"/>
-      </g>
-    </svg>
-  </div>
+  <!-- Bottom horizontal line -->
+  <div class="pre-line-bottom"></div>
+
 </div>
 
 <!-- TOP BAR -->
@@ -1373,7 +1346,26 @@ h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 500; let
 </a>
 
 <script>
-// PRELOADER
+// PRELOADER COUNTER
+(function() {
+  const counterEl = document.getElementById('preCounter');
+  if (!counterEl) return;
+  let current = 0;
+  const target = 100;
+  const duration = 2400;
+  const startDelay = 2200;
+  const startTime = startDelay;
+  const stepTime = duration / target;
+  setTimeout(() => {
+    const interval = setInterval(() => {
+      current++;
+      counterEl.textContent = String(current).padStart(2, '0');
+      if (current >= target) clearInterval(interval);
+    }, stepTime);
+  }, startTime);
+})();
+
+// PRELOADER HIDE
 window.addEventListener('load', () => {
   setTimeout(() => {
     const preloader = document.getElementById('preloader');
@@ -1382,9 +1374,9 @@ window.addEventListener('load', () => {
       document.body.classList.remove('loading');
       setTimeout(() => { preloader.style.display = 'none'; }, 800);
     }
-  }, 1400);
+  }, 4800);
 });
-// Failsafe: hide preloader after 5s no matter what
+// Failsafe: hide preloader after 7s no matter what
 setTimeout(() => {
   const preloader = document.getElementById('preloader');
   if (preloader && !preloader.classList.contains('hidden')) {
@@ -1392,7 +1384,7 @@ setTimeout(() => {
     document.body.classList.remove('loading');
     setTimeout(() => { preloader.style.display = 'none'; }, 800);
   }
-}, 5000);
+}, 7000);
 
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
